@@ -1,16 +1,15 @@
-local __exports = LibStub:NewLibrary("tsaddon", 10000)
+local __exports = LibStub:NewLibrary("tsaddon", 10100)
 if not __exports then return end
 local __class = LibStub:GetLibrary("tslib").newClass
 local CreateFrame = CreateFrame
 local ipairs = ipairs
-local tinsert = table.insert
 __exports.NewAddon = function(name, dep1, dep2)
     local BaseClass = __class(nil, {
         constructor = function(self, args)
             self.modules = {}
             local frame = CreateFrame("Frame", "tslibframe")
             frame:RegisterEvent("ADDON_LOADED")
-            frame:SetScript("OnEvent", function(self, event, addon)
+            frame:SetScript("OnEvent", function(frame, event, addon)
                 if addon ~= name then
                     return 
                 end
@@ -28,7 +27,7 @@ __exports.NewAddon = function(name, dep1, dep2)
             local addon = self
             local BaseModule = __class(nil, {
                 constructor = function(self)
-                    tinsert(addon.modules, self)
+                    addon.modules[#addon.modules + 1] = self
                 end,
                 GetName = function(self)
                     return name

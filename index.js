@@ -2,14 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const wow_mock_1 = require("@wowts/wow-mock");
 const lua_1 = require("@wowts/lua");
-const table_1 = require("@wowts/table");
 function NewAddon(name, dep1, dep2) {
     const BaseClass = class {
         constructor(...args) {
             this.modules = {};
             const frame = wow_mock_1.CreateFrame("Frame", "tslibframe");
             frame.RegisterEvent("ADDON_LOADED");
-            frame.SetScript("OnEvent", (self, event, addon) => {
+            frame.SetScript("OnEvent", (frame, event, addon) => {
                 if (addon !== name)
                     return;
                 this.OnInitialize();
@@ -25,7 +24,7 @@ function NewAddon(name, dep1, dep2) {
             const addon = this;
             const BaseModule = class {
                 constructor() {
-                    table_1.insert(addon.modules, this);
+                    addon.modules[lua_1.lualength(addon.modules) + 1] = this;
                 }
                 GetName() {
                     return name;

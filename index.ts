@@ -1,6 +1,6 @@
 import { Constructor, Library } from "@wowts/tslib";
 import { CreateFrame, UIFrame } from "@wowts/wow-mock";
-import { LuaArray, ipairs } from "@wowts/lua";
+import { LuaArray, ipairs, lualength } from "@wowts/lua";
 import { insert as tinsert } from "@wowts/table";
 
 export interface AceModule {
@@ -32,7 +32,7 @@ export function NewAddon<T, U>(name: string, dep1?:Library<T>, dep2?: Library<U>
         constructor(...args:any[]) {
             const frame = CreateFrame("Frame", "tslibframe");
             frame.RegisterEvent("ADDON_LOADED");
-            frame.SetScript("OnEvent", (self: UIFrame, event: string, addon: string) => {
+            frame.SetScript("OnEvent", (frame: UIFrame, event: string, addon: string) => {
                 if (addon !== name) return;
                 this.OnInitialize();
                 for (const [,module] of ipairs(this.modules)) {
@@ -47,7 +47,7 @@ export function NewAddon<T, U>(name: string, dep1?:Library<T>, dep2?: Library<U>
             const addon = this;
             const BaseModule = class {
                 constructor() {
-                    tinsert(addon.modules, this);
+                    addon.modules[lualength(addon.modules) + 1] = this;
                 }
                 GetName() {
                     return name;
