@@ -4,8 +4,6 @@ local __class = LibStub:GetLibrary("tslib").newClass
 local CreateFrame = CreateFrame
 local ipairs = ipairs
 local tinsert = table.insert
-__exports.vide = function()
-end
 __exports.NewAddon = function(name, dep1, dep2)
     local BaseClass = __class(nil, {
         constructor = function(self, args)
@@ -16,12 +14,15 @@ __exports.NewAddon = function(name, dep1, dep2)
                 if addon ~= name then
                     return 
                 end
+                self:OnInitialize()
                 for _, module in ipairs(self.modules) do
                     if module.OnInitialize then
                         module:OnInitialize()
                     end
                 end
             end)
+        end,
+        OnInitialize = function(self)
         end,
         NewModule = function(self, name, dep1, dep2, dep3, dep4)
             local addon = self

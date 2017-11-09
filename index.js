@@ -3,8 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const wow_mock_1 = require("@wowts/wow-mock");
 const lua_1 = require("@wowts/lua");
 const table_1 = require("@wowts/table");
-function vide() { }
-exports.vide = vide;
 function NewAddon(name, dep1, dep2) {
     const BaseClass = class {
         constructor(...args) {
@@ -14,6 +12,7 @@ function NewAddon(name, dep1, dep2) {
             frame.SetScript("OnEvent", (self, event, addon) => {
                 if (addon !== name)
                     return;
+                this.OnInitialize();
                 for (const [, module] of lua_1.ipairs(this.modules)) {
                     if (module.OnInitialize) {
                         module.OnInitialize();
@@ -21,6 +20,7 @@ function NewAddon(name, dep1, dep2) {
                 }
             });
         }
+        OnInitialize() { }
         NewModule(name, dep1, dep2, dep3, dep4) {
             const addon = this;
             const BaseModule = class {

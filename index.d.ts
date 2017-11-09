@@ -10,8 +10,8 @@ export interface Addon {
     NewModule<T, U, V>(name: string, dep1: Library<T>, dep2: Library<U>, dep3: Library<V>): Constructor<AceModule & T & U & V>;
     NewModule<T, U, V, W>(name: string, dep1: Library<T>, dep2: Library<U>, dep3: Library<V>, dep4: Library<W>): Constructor<AceModule & T & U & V & W>;
     GetName(): string;
+    OnInitialize?(): void;
 }
-export declare function vide(): void;
 /** Creates a new addon
  * @param name Must be the add-on name, as defined in the .toc file
  * @param depency A dependency

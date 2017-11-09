@@ -15,9 +15,8 @@ export interface Addon {
     NewModule<T, U, V>(name: string, dep1: Library<T>, dep2: Library<U>, dep3: Library<V>): Constructor<AceModule & T & U & V>;
     NewModule<T, U, V, W>(name: string, dep1: Library<T>, dep2: Library<U>, dep3: Library<V>, dep4: Library<W>): Constructor<AceModule & T & U & V & W>;
     GetName():string;
+    OnInitialize?():void;
 }
-
-export function vide(){}
 
 /** Creates a new addon
  * @param name Must be the add-on name, as defined in the .toc file
@@ -35,6 +34,7 @@ export function NewAddon<T, U>(name: string, dep1?:Library<T>, dep2?: Library<U>
             frame.RegisterEvent("ADDON_LOADED");
             frame.SetScript("OnEvent", (self: UIFrame, event: string, addon: string) => {
                 if (addon !== name) return;
+                this.OnInitialize();
                 for (const [,module] of ipairs(this.modules)) {
                     if (module.OnInitialize) {
                         module.OnInitialize();
@@ -42,6 +42,7 @@ export function NewAddon<T, U>(name: string, dep1?:Library<T>, dep2?: Library<U>
                 }
             })
         }
+        OnInitialize(){}
         NewModule<T, U, V, W>(name: string, dep1?: Library<T>, dep2?: Library<U>, dep3?: Library<V>, dep4?: Library<W>) {
             const addon = this;
             const BaseModule = class {
