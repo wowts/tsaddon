@@ -1,4 +1,4 @@
-local __exports = LibStub:NewLibrary("tsaddon", 10100)
+local __exports = LibStub:NewLibrary("tsaddon", 10101)
 if not __exports then return end
 local __class = LibStub:GetLibrary("tslib").newClass
 local CreateFrame = CreateFrame
