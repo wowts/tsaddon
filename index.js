@@ -8,13 +8,22 @@ function NewAddon(name, dep1, dep2) {
             this.modules = {};
             const frame = wow_mock_1.CreateFrame("Frame", "tslibframe");
             frame.RegisterEvent("ADDON_LOADED");
+            frame.RegisterEvent("PLAYER_LOGIN");
+            let loaded = false;
+            let logged = wow_mock_1.IsLoggedIn();
+            let initialized = false;
             frame.SetScript("OnEvent", (frame, event, addon) => {
-                if (addon !== name)
-                    return;
-                this.OnInitialize();
-                for (const [, module] of lua_1.ipairs(this.modules)) {
-                    if (module.OnInitialize) {
-                        module.OnInitialize();
+                if (event === "PLAYER_LOGIN")
+                    logged = true;
+                if (event === "ADDON_LOADED" && addon === name)
+                    loaded = true;
+                if (loaded && logged && !initialized) {
+                    initialized = true;
+                    this.OnInitialize();
+                    for (const [, module] of lua_1.ipairs(this.modules)) {
+                        if (module.OnInitialize) {
+                            module.OnInitialize();
+                        }
                     }
                 }
             });

@@ -1,7 +1,6 @@
 import { Constructor, Library } from "@wowts/tslib";
-import { CreateFrame, UIFrame } from "@wowts/wow-mock";
+import { CreateFrame, UIFrame, IsLoggedIn } from "@wowts/wow-mock";
 import { LuaArray, ipairs, lualength } from "@wowts/lua";
-import { insert as tinsert } from "@wowts/table";
 
 export interface AceModule {
     GetName?(): string;
@@ -32,12 +31,20 @@ export function NewAddon<T, U>(name: string, dep1?:Library<T>, dep2?: Library<U>
         constructor(...args:any[]) {
             const frame = CreateFrame("Frame", "tslibframe");
             frame.RegisterEvent("ADDON_LOADED");
+            frame.RegisterEvent("PLAYER_LOGIN");
+            let loaded = false;
+            let logged = IsLoggedIn();
+            let initialized = false;
             frame.SetScript("OnEvent", (frame: UIFrame, event: string, addon: string) => {
-                if (addon !== name) return;
-                this.OnInitialize();
-                for (const [,module] of ipairs(this.modules)) {
-                    if (module.OnInitialize) {
-                        module.OnInitialize();
+                if (event === "PLAYER_LOGIN") logged = true;
+                if (event === "ADDON_LOADED" && addon === name) loaded = true;
+                if (loaded && logged && !initialized) {
+                    initialized = true;
+                    this.OnInitialize();
+                    for (const [,module] of ipairs(this.modules)) {
+                        if (module.OnInitialize) {
+                            module.OnInitialize();
+                        }
                     }
                 }
             })

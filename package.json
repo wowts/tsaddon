@@ -12,7 +12,7 @@
   "dependencies": {
     "@wowts/tslib": "^1.0.0",
     "@wowts/lua": "^1.0.3",
-    "@wowts/wow-mock": "^1.0.1",
+    "@wowts/wow-mock": "^1.0.8",
     "@wowts/table": "^1.0.0"
   },
   "devDependencies": {

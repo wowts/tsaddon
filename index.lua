@@ -2,6 +2,7 @@ local __exports = LibStub:NewLibrary("tsaddon", 10101)
 if not __exports then return end
 local __class = LibStub:GetLibrary("tslib").newClass
 local CreateFrame = CreateFrame
+local IsLoggedIn = IsLoggedIn
 local ipairs = ipairs
 __exports.NewAddon = function(name, dep1, dep2)
     local BaseClass = __class(nil, {
@@ -9,14 +10,24 @@ __exports.NewAddon = function(name, dep1, dep2)
             self.modules = {}
             local frame = CreateFrame("Frame", "tslibframe")
             frame:RegisterEvent("ADDON_LOADED")
+            frame:RegisterEvent("PLAYER_LOGIN")
+            local loaded = false
+            local logged = IsLoggedIn()
+            local initialized = false
             frame:SetScript("OnEvent", function(frame, event, addon)
-                if addon ~= name then
-                    return 
+                if event == "PLAYER_LOGIN" then
+                    logged = true
                 end
-                self:OnInitialize()
-                for _, module in ipairs(self.modules) do
-                    if module.OnInitialize then
-                        module:OnInitialize()
+                if event == "ADDON_LOADED" and addon == name then
+                    loaded = true
+                end
+                if loaded and logged and  not initialized then
+                    initialized = true
+                    self:OnInitialize()
+                    for _, module in ipairs(self.modules) do
+                        if module.OnInitialize then
+                            module:OnInitialize()
+                        end
                     end
                 end
             end)
