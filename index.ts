@@ -13,6 +13,12 @@ export interface Addon {
     NewModule<T, U>(name: string, dep1: Library<T>, dep2: Library<U>) : Constructor<AceModule & T & U>;
     NewModule<T, U, V>(name: string, dep1: Library<T>, dep2: Library<U>, dep3: Library<V>): Constructor<AceModule & T & U & V>;
     NewModule<T, U, V, W>(name: string, dep1: Library<T>, dep2: Library<U>, dep3: Library<V>, dep4: Library<W>): Constructor<AceModule & T & U & V & W>;
+
+    NewModuleWithBase<T>(name: string, base: Constructor<T>) : Constructor<AceModule & T>;
+    NewModuleWithBase<T, U>(name: string, base: Constructor<T>, dep2: Library<U>) : Constructor<AceModule & T & U>;
+    NewModuleWithBase<T, U, V>(name: string, base: Constructor<T>, dep2: Library<U>, dep3: Library<V>): Constructor<AceModule & T & U & V>;
+    NewModuleWithBase<T, U, V, W>(name: string, base: Constructor<T>, dep2: Library<U>, dep3: Library<V>, dep4: Library<W>): Constructor<AceModule & T & U & V & W>;
+
     GetName():string;
     OnInitialize?():void;
 }
@@ -74,6 +80,30 @@ export function NewAddon<T, U>(name: string, dep1?:Library<T>, dep2?: Library<U>
             }
             return BaseModule;
         }
+
+        NewModuleWithBase<U, V, W>(name: string, base: Constructor<{}>, dep2?: Library<U>, dep3?: Library<V>, dep4?: Library<W>) {
+            const addon = this;
+            const BaseModule = class extends base {
+                constructor(...__args:any[]) {
+                    super(__args);
+                    addon.modules[lualength(addon.modules) + 1] = this;
+                }
+                GetName() {
+                    return name;
+                }
+            };
+            if (dep2) {
+                if (dep3) {
+                    if (dep4) {
+                        return dep2.Embed(dep3.Embed(dep4.Embed(BaseModule)));
+                    }
+                    return dep2.Embed(dep3.Embed(BaseModule));
+                }                    
+                return dep2.Embed(BaseModule);
+            }
+            return BaseModule;
+        }
+
         GetName() {
             return name;
         }

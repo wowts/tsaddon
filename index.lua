@@ -58,6 +58,28 @@ __exports.NewAddon = function(name, dep1, dep2)
             end
             return BaseModule
         end,
+        NewModuleWithBase = function(self, name, base, dep2, dep3, dep4)
+            local addon = self
+            local BaseModule = __class(base, {
+                constructor = function(self, ...)
+                    base.constructor(self, ...)
+                    addon.modules[#addon.modules + 1] = self
+                end,
+                GetName = function(self)
+                    return name
+                end,
+            })
+            if dep2 then
+                if dep3 then
+                    if dep4 then
+                        return dep2:Embed(dep3:Embed(dep4:Embed(BaseModule)))
+                    end
+                    return dep2:Embed(dep3:Embed(BaseModule))
+                end
+                return dep2:Embed(BaseModule)
+            end
+            return BaseModule
+        end,
         GetName = function(self)
             return name
         end,

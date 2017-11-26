@@ -53,6 +53,28 @@ function NewAddon(name, dep1, dep2) {
             }
             return BaseModule;
         }
+        NewModuleWithBase(name, base, dep2, dep3, dep4) {
+            const addon = this;
+            const BaseModule = class extends base {
+                constructor(...__args) {
+                    super(__args);
+                    addon.modules[lua_1.lualength(addon.modules) + 1] = this;
+                }
+                GetName() {
+                    return name;
+                }
+            };
+            if (dep2) {
+                if (dep3) {
+                    if (dep4) {
+                        return dep2.Embed(dep3.Embed(dep4.Embed(BaseModule)));
+                    }
+                    return dep2.Embed(dep3.Embed(BaseModule));
+                }
+                return dep2.Embed(BaseModule);
+            }
+            return BaseModule;
+        }
         GetName() {
             return name;
         }
