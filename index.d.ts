@@ -1,6 +1,6 @@
 import { Constructor, Library } from "@wowts/tslib";
 export interface AceModule {
-    GetName?(): string;
+    GetName(): string;
     OnInitialize?(): void;
 }
 export interface Addon {

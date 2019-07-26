@@ -3,7 +3,7 @@ import { CreateFrame, UIFrame, IsLoggedIn } from "@wowts/wow-mock";
 import { LuaArray, ipairs, lualength } from "@wowts/lua";
 
 export interface AceModule {
-    GetName?(): string;
+    GetName(): string;
     OnInitialize?(): void;
 }
 
