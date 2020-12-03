@@ -6,7 +6,7 @@ local IsLoggedIn = IsLoggedIn
 local ipairs = ipairs
 __exports.NewAddon = function(name, dep1, dep2)
     local BaseClass = __class(nil, {
-        constructor = function(self, args)
+        constructor = function(self, ...)
             self.modules = {}
             local frame = CreateFrame("Frame", "tslibframe")
             frame:RegisterEvent("ADDON_LOADED")
