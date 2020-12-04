@@ -1,6 +1,6 @@
 {
     "name": "@wowts/tsaddon",
-    "version": "1.2.1",
+    "version": "1.3.0",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -10,10 +10,10 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@wowts/tslib": "^1.0.0",
         "@wowts/lua": "^1.0.3",
-        "@wowts/wow-mock": "^1.0.8",
-        "@wowts/table": "^1.0.0"
+        "@wowts/table": "^1.0.0",
+        "@wowts/tslib": "^1.0.0",
+        "@wowts/wow-mock": "^1.0.8"
     },
     "devDependencies": {
         "@wowts/tstolua": "^1.11.4"
@@ -24,7 +24,6 @@
     },
     "lua": {
         "name": "tsaddon",
-        "git": "https://github.com/wowts/tsaddon.git",
-        "entry": "tsaddon-master/files.xml"
+        "entry": "files.xml"
     }
 }
